@@ -1,0 +1,15 @@
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  width: 100%;
+  margin: auto;
+}
+
+.img-title {
+  position: relative;
+  background-color: #fff;
+  color: #000;
+  width: 100%;
+  text-align: center;
+  opacity: 0.43;
+  filter: alpha(opacity=43);
+}
