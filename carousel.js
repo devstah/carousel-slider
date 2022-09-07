@@ -1,82 +1,45 @@
-    <script type="text/javascript">
-    const slider = document.querySelector(".slider");
-    const nextBtn = document.querySelector(".next-btn");
-    const prevBtn = document.querySelector(".prev-btn");
-    const slides = document.querySelectorAll(".slide");
-    const slideIcons = document.querySelectorAll(".slide-icon");
-    const numberOfSlides = slides.length;
-    var slideNumber = 0;
+// SplideJS Slider. See full docs at:
+// https://splidejs.com/
+document.addEventListener('DOMContentLoaded', function () {
+  var splide = new Splide('#splide', {
+    type         : 'loop',
+    perPage      : 1,
+    autoplay     : true,
+    interval     : 15000, // How long to display each slide
+    pauseOnHover : false, // must be false
+    pauseOnFocus : false, // must be false
+    resetProgress: false
+  }).mount();
 
-    //image slider next button
-    nextBtn.addEventListener("click", () => {
-      slides.forEach((slide) => {
-        slide.classList.remove("active");
-      });
-      slideIcons.forEach((slideIcon) => {
-        slideIcon.classList.remove("active");
-      });
+  var button = document.querySelector('.splide__play-pause');
 
-      slideNumber++;
+  if (button) {
+    var pausedClass = 'is-paused';
 
-      if(slideNumber > (numberOfSlides - 1)){
-        slideNumber = 0;
+    // Remove the paused class and change the label to "Pause".
+    splide.on('autoplay:play', function () {
+      button.classList.remove(pausedClass);
+      button.textContent = 'Pause';
+      button.setAttribute('aria-label', 'Pause Autoplay');
+    });
+
+    // Add the paused class and change the label to "Play".
+    splide.on('autoplay:pause', function () {
+      button.classList.add(pausedClass);
+      button.textContent = 'Play';
+      button.setAttribute('aria-label', 'Start Autoplay');
+    });
+
+    // Toggle play/pause when the button is clicked.
+    splide.on('click', function () {
+      var flag     = 99;
+      var Autoplay = splide.Components.Autoplay;
+
+      if (button.classList.contains(pausedClass)) {
+        Autoplay.play(flag);
+      } else {
+        Autoplay.pause(flag);
       }
-
-      slides[slideNumber].classList.add("active");
-      slideIcons[slideNumber].classList.add("active");
-    });
-
-    //image slider previous button
-    prevBtn.addEventListener("click", () => {
-      slides.forEach((slide) => {
-        slide.classList.remove("active");
-      });
-      slideIcons.forEach((slideIcon) => {
-        slideIcon.classList.remove("active");
-      });
-
-      slideNumber--;
-
-      if(slideNumber < 0){
-        slideNumber = numberOfSlides - 1;
-      }
-
-      slides[slideNumber].classList.add("active");
-      slideIcons[slideNumber].classList.add("active");
-    });
-
-    //image slider autoplay
-    var playSlider;
-
-    var repeater = () => {
-      playSlider = setInterval(function(){
-        slides.forEach((slide) => {
-          slide.classList.remove("active");
-        });
-        slideIcons.forEach((slideIcon) => {
-          slideIcon.classList.remove("active");
-        });
-
-        slideNumber++;
-
-        if(slideNumber > (numberOfSlides - 1)){
-          slideNumber = 0;
-        }
-
-        slides[slideNumber].classList.add("active");
-        slideIcons[slideNumber].classList.add("active");
-      }, 4000);
-    }
-    repeater();
-
-    //stop the image slider autoplay on mouseover
-    slider.addEventListener("mouseover", () => {
-      clearInterval(playSlider);
-    });
-
-    //start the image slider autoplay again on mouseout
-    slider.addEventListener("mouseout", () => {
-      repeater();
-    });
-    </script>
-      
+    }, button);
+  }
+});
